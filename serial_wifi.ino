@@ -40,6 +40,7 @@ void serial() {
   text +="<p><a href='index.html'>index</a></p>";
   text +="</body></html>";
   server.send(200, "text/html", text);
+   Serial.println("ai deschis adresa serial");
   //set_position(0.0, 10.0, 0.0);
   //String message="G01 X0 Y0\n";
   //process_string(message,message.length());
@@ -61,24 +62,10 @@ void setup() {
 ESP.eraseConfig();
 WiFi.disconnect(true);
 WiFi.mode(WIFI_AP);
-WiFi.softAP("Costycnc1");
-  //Serial.printf("Try connecting to %s ", ssid1);
-  WiFi.begin(ssid, password);
-  int attempt=0;
-  while ((WiFi.status() != WL_CONNECTED) && attempt<10)//try 10 times to connect to router 
-    // if not succeed ... connect locally
-  {
-    attempt ++;
-    delay(500);
-    Serial.print(attempt);
+WiFi.softAP("Costycnc2");
 
-  }
-  if(attempt < 10){
-  Serial.println(" connected to router and local");}
-    else{
-      Serial.println(" connected only local");
-}
-     server.begin();
+
+   
   Serial.println("TCP server started");
   server.on("/serial",serial);
  server.onNotFound(handleNotFound);
@@ -88,6 +75,6 @@ WiFi.softAP("Costycnc1");
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+   server.handleClient();
 
 }
