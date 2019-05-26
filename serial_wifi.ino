@@ -7,6 +7,11 @@
 String ssid;
 String password;
 
+char c;
+#define COMMAND_SIZE 128
+char word1[COMMAND_SIZE];
+byte serial_count;
+
 ESP8266WebServer server(80);
 File fsUploadFile; 
 
@@ -38,9 +43,23 @@ void serial() {
   text +="<a href='/yplus'>Y+ </a>";
   text +="<a href='/yminus'>Y- </a></h1></p>";
   text +="<p><a href='index.html'>index</a></p>";
-  text +="</body></html>";
+
+   Serial.println("G00");
+
+   delay(1000);
+ 
+  while (Serial.available() > 0)
+  {
+    c = Serial.read();
+  
+      word1[serial_count] = c;
+      serial_count++;
+    
+  }
+  serial_count=0;
+     text +=word1;
+     text +="</body></html>";
   server.send(200, "text/html", text);
-   Serial.println("ai deschis adresa serial");
   //set_position(0.0, 10.0, 0.0);
   //String message="G01 X0 Y0\n";
   //process_string(message,message.length());
@@ -53,7 +72,7 @@ void setup() {
 
   Serial.begin(9600);         // Start the Serial communication to send messages to the computer
   delay(10);
-  Serial.println('\n');
+  Serial.println('blabla\n');
 
   SPIFFS.begin(); 
 //  ssid=LoadDataFromFile("ssid.txt");
